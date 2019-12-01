@@ -1,6 +1,6 @@
 package ru.jmentor.rest;
 
-import ru.jmentor.dto.AdminUserDto;
+import ru.jmentor.dto.UserDto;
 import ru.jmentor.model.User;
 import ru.jmentor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,25 +12,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/rest/admin/")
-public class AdminRestControllerV1 {
-
+@RequestMapping(value = "/rest/user/{id}")
+public class UserRestController {
     private final UserService userService;
 
     @Autowired
-    public AdminRestControllerV1(UserService userService) {
+    public UserRestController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping(value = "users/{id}")
-    public ResponseEntity<AdminUserDto> getUserById(@PathVariable(name = "id") Long id) {
+    @GetMapping
+    public ResponseEntity<UserDto> getUserById(@PathVariable(name = "id") Long id){
         User user = userService.findById(id);
 
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+        if(user == null){ return new ResponseEntity<>(HttpStatus.NO_CONTENT); }
 
-        AdminUserDto result = AdminUserDto.fromUser(user);
+        UserDto result = UserDto.fromUser(user);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

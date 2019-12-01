@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(userRoles);
         user.setStatus(Status.ACTIVE);
 
-        User registeredUser = userRepository.save(user);
+        User registeredUser = userRepository.saveAndFlush(user);
 
         log.info("IN register - user: {} successfully registered", registeredUser);
 
@@ -76,5 +76,22 @@ public class UserServiceImpl implements UserService {
     public void delete(Long id) {
         userRepository.deleteById(id);
         log.info("IN delete - user with id: {} successfully deleted");
+    }
+
+    @Override
+    public User edit(User user) {
+        Role roleUser = roleRepository.findByName("ROLE_USER");
+        List<Role> userRoles = new ArrayList<>();
+        userRoles.add(roleUser);
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(userRoles);
+        user.setStatus(Status.ACTIVE);
+
+        User registeredUser = userRepository.save(user);
+
+        log.info("IN edit - user: {} successfully complete", registeredUser);
+
+        return registeredUser;
     }
 }

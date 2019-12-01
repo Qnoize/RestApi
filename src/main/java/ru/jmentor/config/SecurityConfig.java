@@ -15,9 +15,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private static final String ADMIN_ENDPOINT = "/rest/admin/**";
-    private static final String LOGIN_ENDPOINT = "/rest/auth/login";
-
     @Autowired
     public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -37,9 +34,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(LOGIN_ENDPOINT).permitAll()
-                .antMatchers(ADMIN_ENDPOINT).hasRole("ADMIN")
+                .antMatchers("/rest/login", "/rest/register").permitAll()
+                .antMatchers("/rest/**", "/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
+                .and()
+                .logout().logoutUrl("/logout")
+                .logoutSuccessUrl("/").permitAll()
+                .and()
+                .exceptionHandling().accessDeniedPage("/error")
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
     }

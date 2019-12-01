@@ -19,17 +19,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/rest/auth/")
-public class AuthenticationRestControllerV1 {
+@RequestMapping(value = "/rest/")
+public class LoginRestController {
 
     private final AuthenticationManager authenticationManager;
-
     private final JwtTokenProvider jwtTokenProvider;
-
     private final UserService userService;
 
     @Autowired
-    public AuthenticationRestControllerV1(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService) {
+    public LoginRestController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
@@ -42,9 +40,7 @@ public class AuthenticationRestControllerV1 {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
             User user = userService.findByUsername(username);
 
-            if (user == null) {
-                throw new UsernameNotFoundException("User with username: " + username + " not found");
-            }
+            if (user == null) { throw new UsernameNotFoundException("User with username: " + username + " not found"); }
 
             String token = jwtTokenProvider.createToken(username, user.getRoles());
 
