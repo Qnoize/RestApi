@@ -5,11 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -23,13 +19,10 @@ public class Role extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles")
+    @Transient
     private List<User> users;
 
     @Override
-    public String toString() {
-        return "Role{" +
-                "id: " + super.getId() + ", " +
-                "name: " + name + "}";
-    }
+    public String toString() { return name; }
 }

@@ -25,8 +25,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-    @Bean
-    public AuthenticationSuccessHandlerImpl successHandler(){ return new AuthenticationSuccessHandlerImpl(); }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -38,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/rest/login", "/rest/register").permitAll()
+                .antMatchers("/rest/login", "/rest/register", "/error").permitAll()
                 .antMatchers("/rest/**", "/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
