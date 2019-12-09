@@ -7,6 +7,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/rest/error")
-public class ErrorRestController {
-
-}
+public class ErrorRestController { }
